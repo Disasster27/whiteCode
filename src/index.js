@@ -3,7 +3,7 @@ import './scss/main.scss';
 document.addEventListener( 'DOMContentLoaded', () => {
 
 	//let url = 'https://my-json-server.typicode.com/Disasster27/db/db';
-	let url = 'https://api.myjson.com/bins/152mue';
+	let url = 'https://api.myjson.com/bins/cyod6';
 	let amountElements = 15;
 	let pages = 0;
 	// const product = [];
@@ -186,20 +186,26 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	
 	function getPriceRange ( data, AllElem ) {
 		
-		minimalPrice = data[ 4 ].price;
-		
+		minimalPrice = data[ 1 ].price;
+		let keysArr = Object.keys(data)
+		// console.log( Object.keys(data) )
 		for ( let i = 1 ; i < AllElem ; i++) {
 //			console.log( data[ i ].price )
+
+			let actualElem = data[ i ].price;
+			let nextElem =  data[ i + 1 ].price;
+
+			console.log( actualElem, nextElem )
 			
-			if ( data[ i ].price > data[ i + 1 ].price ) {
-				maximumPrise = data[ i ].price;
-				if ( data[ i + 1 ].price < minimalPrice ) {
-					minimalPrice = data[ i + 1 ].price;
+			if ( actualElem > nextElem ) {
+				maximumPrise = actualElem > maximumPrise ? actualElem : maximumPrise;
+				if ( nextElem < minimalPrice ) {
+					minimalPrice = nextElem;
 				};
 			} else {
-				maximumPrise = data[ i + 1 ].price;
-				if ( data[ i ].price < minimalPrice ) {
-					minimalPrice = data[ i ].price;
+				maximumPrise = nextElem > maximumPrise ? nextElem : maximumPrise;
+				if ( actualElem < minimalPrice ) {
+					minimalPrice = actualElem;
 				};
 			};
 		};
@@ -234,7 +240,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 								<p class="item__price">${ product.price }</p>
 							</div>
 						</a>
-						<div class="item__add" data-id="${ product.id }">
+						<div class="item__add" data-item-id="${ product.id }">
 							<a href="#" class="add"><img src="img/Forma%201%20copy.svg" alt="">Add to Cart</a>
 						</div>`;
 		
@@ -275,7 +281,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	function addToCartEvent ( product ) {
 //		console.log( product )
 		
-		document.querySelector( `[ data-id="${ product.id }" ]` ).addEventListener( 'click', event => {
+		document.querySelector( `[ data-item-id="${ product.id }" ]` ).addEventListener( 'click', event => {
 			if ( cartGoods.hasOwnProperty( product.id ) ) {
 				cartGoods[ product.id ].quantity += 1; 
 				reRender( cartGoods[product.id] );
@@ -306,7 +312,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const cartTotal = document.querySelector( '.cart__total' );	
 		const cartItem = document.createElement( 'div' );
 		cartItem.classList.add( 'cart__item' );
-		cartItem.setAttribute( 'data-id', `${ item.id }` )
+		cartItem.setAttribute( 'data-cart-id', `${ item.id }` )
 		cartTotal.insertAdjacentElement( 'beforebegin', cartItem );
 		cartItem.innerHTML = `<img src="${ item.image }" alt="image" class="cart__image">
 								<div class="cart__title">
@@ -315,43 +321,37 @@ document.addEventListener( 'DOMContentLoaded', () => {
 								</div>
 								<div class="cart__delete"><i class="far fa-trash-alt"></i></div>`;
 		deleteCart ( cartItem );
-		
 	};
 
 	
 
 	function deleteCart ( cartItem ) {
-		console.log( cartItem )
+		// console.log( cartItem )
 		const deleteBtn = cartItem.querySelector( '.cart__delete' );
 		
 		deleteBtn.addEventListener( 'click', event => {
-			console.log( cartGoods )
-			let quantity = cartGoods[ cartItem.dataset.id].quantity;
-			console.log( quantity )
+			// console.log( cartGoods )
+			let quantity = cartGoods[ cartItem.dataset.cartId].quantity;
+			// console.log( cartItem.dataset )
 			cartItem.remove();
 			totalAmount -= quantity;
 			setTotalAmount ();
-			let price = -(cartGoods[ cartItem.dataset.id].price * quantity);
+			let price = -(cartGoods[ cartItem.dataset.cartId].price * quantity);
 			calculateTotalPrice ( price );
 			
-			delete cartGoods[event.target.parentNode.parentNode.dataset.id];
+			delete cartGoods[event.target.parentNode.parentNode.dataset.cartId];
 			storage.save();
 		} );
 	};
 	
 	function reRender ( item ) {
-		
-		document.querySelector( `[ data-id="${ item.id }" ]` ).querySelector( '.quantity' ).textContent = item.quantity;
+		// console.log( item )
+		document.querySelector( `[ data-cart-id="${ item.id }" ]` ).querySelector( '.quantity' ).textContent = item.quantity;
 	};
 	
-	
-	
 	function calculateTotalPrice ( price ) {
-		
 		totalPrice += price;
 		setTotalPrice ();
-
-		
 	};
 	function setTotalPrice () {
 		document.querySelector( '.cart__total' ).textContent = 'Total ' + totalPrice;
@@ -400,15 +400,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			setTotalAmount ();
 
 			for ( let key in cartGoods ) {
+				// console.log( cartGoods[key] )
 				renderCart ( cartGoods[key] )
 			};
 
 		},
 	};
 
-
-
-	
 	
 	getGoods ( url );
 
