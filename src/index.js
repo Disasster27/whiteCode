@@ -248,11 +248,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		addToCartEvent( product );
 	};
 
-	function renderCatalog ( goods ) {
-		for ( let i = 1 ; i <= amountElements ; i++ ) {
-			renderItem ( goods[ i ] )
-		}
-	}	
+	
 
 	function countPages ( allGoods ) {
 		// console.log( allGoods )
@@ -296,6 +292,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	};
 
+	function renderCatalog ( goods ) {
+		for ( let i = 1 ; i <= amountElements ; i++ ) {
+			renderItem ( goods[ i ] )
+		}
+	};	
+
 	function reRenderItem ( arr ) {
 		document.querySelectorAll( '.item' ).forEach( elem => {
 			elem.remove();
@@ -303,7 +305,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		for ( let i = 0 ; i < arr.length ; i++ ) {
 			renderItem ( arr[ i ] );
 		}
-	}
+	};
 
 	function toArr ( goods ) {
 		const goodsArray = [];
@@ -313,7 +315,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		product = goodsArray ;
 		// console.log( product )
 		return goodsArray;
-	}
+	};
 	
 	function addToCartEvent ( product ) {
 //		console.log( product )
@@ -396,21 +398,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	
 	function sort () {
 		let input = document.querySelector( '.filter__input' );
-		 
+		let suitableElem =[];
+
 		document.querySelector( '.filter__text' ).addEventListener( 'submit', event => {
 			event.preventDefault();
 			let inputValue = input.value.trim();
 			const regex = new RegExp( inputValue, 'i' );
 			
-			let suitableElem = product.filter( elem =>  regex.test( elem.title ) );
-			
+			suitableElem = product.filter( elem =>  regex.test( elem.title ) );
 
+			reRenderItem ( suitableElem )
 			console.log( suitableElem )
-		}  )
-
-		// const regex = new RegExp( inputValue, 'i' );
-
-		// console.log( product )
+		}  );
 	};
 
 	sort()
