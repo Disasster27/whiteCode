@@ -10,13 +10,55 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	const cartGoods = {
 		totalAmount : 0,
 	};
+	let minimalPrice = 0;
+	let maximumPrise = 0;
+	
+	
 	
 	
 	
 	
 	const range = document.querySelector( '.filter__range' );
-	range.addEventListener( 'mousedown', event => {
+	
+//	range.querySelectorAll( '[data-value-min]' );
+//	
+//	console.log( range.querySelector( '[data-value-min]' ) )
+	
+	
+//	range.querySelectorAll( '.filter__prise' ).forEach( element => {
+//		element
+//		console.log( element )
+//		element.textContent = element.attributes[1].value;
+//	} );
+	
+	function drawPriceLeft () {
+		let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
+		let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
+		let totall = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
 		
+		console.log( min )
+		
+		let part = parseFloat( styleLeft ) / ( totall / 100 ); 
+		let priceRange = max - min;
+		let minPrice = Math.round( min + ( priceRange * ( part / 100 ) ) );
+		
+		console.log( minPrice )
+		
+		document.querySelector( '[data-value-min]' ).textContent = minPrice;
+	};
+	function drawPriceRight () {
+		let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
+		let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
+		let totall = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
+		
+		let part = parseFloat( styleRight ) / ( totall / 100 ); 
+		let priceRange = max - min;
+		let maxPrice = Math.round( max - ( priceRange * ( part / 100 ) ) );
+		
+		document.querySelector( '[data-value-max]' ).textContent = maxPrice;
+	};
+	
+	range.addEventListener( 'mousedown', event => {
 		if ( event.target.classList.contains( 'range__button-left' ) ) {
 			let isMove = true;
 			setPositionLeft( event, isMove );
@@ -47,6 +89,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				styleLeft = btn.style.left;
 				
 		setBetweenLeft(  ); 
+		drawPriceLeft();		
 				
 				if ( parseFloat( styleLeft ) < 0  ) {
 					
@@ -79,7 +122,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				styleRight = btn.style.right;
 				
 				setBetweenRight ();
-				
+				drawPriceRight();
 				if ( parseFloat( styleRight ) < 0  ) {
 					isMove = false;
 					return
@@ -126,9 +169,47 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		fetch( url )
 			.then( data => data.json() )
 			.then( data => {
-				countPages( data )
-				renderCatalog ( data )
+				countPages( data );
+				renderCatalog ( data );
 			} );
+	};
+	
+	function getPriceRange ( data, AllElem ) {
+		
+		minimalPrice = data[ 4 ].price;
+		
+		for ( let i = 1 ; i < AllElem ; i++) {
+//			console.log( data[ i ].price )
+			
+			if ( data[ i ].price > data[ i + 1 ].price ) {
+				maximumPrise = data[ i ].price;
+				if ( data[ i + 1 ].price < minimalPrice ) {
+					minimalPrice = data[ i + 1 ].price;
+				};
+			} else {
+				maximumPrise = data[ i + 1 ].price;
+				if ( data[ i ].price < minimalPrice ) {
+					minimalPrice = data[ i ].price;
+				};
+			};
+		};
+		
+		
+		console.log( maximumPrise, minimalPrice );
+		setPriceLimit ();
+	};
+	
+	function setPriceLimit () {
+		range.querySelectorAll( '[data-value-min]' );
+	
+		range.querySelector( '[data-value-min]' ).setAttribute( 'data-value-min', minimalPrice )
+		range.querySelector( '[data-value-min]' ).textContent = minimalPrice;
+		
+		range.querySelectorAll( '[data-value-max]' );
+	
+		range.querySelector( '[data-value-max]' ).setAttribute( 'data-value-max', maximumPrise )
+		range.querySelector( '[data-value-max]' ).textContent = maximumPrise;
+
 	}
 
 	function renderItem ( product ) {
@@ -162,6 +243,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		const allElem = Object.keys( allGoods ).length;
 		pages = Math.ceil( allElem/amountElements );
 		setPagination ();
+		getPriceRange( allGoods, allElem );
 	};
 	
 	function setPagination () {
