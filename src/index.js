@@ -6,10 +6,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	let url = 'https://api.myjson.com/bins/152mue';
 	let amountElements = 15;
 	let pages = 0;
-	const product = [];
-	const cartGoods = {
-		totalAmount : 0,
-	};
+	// const product = [];
+	const cartGoods = {};
+	let totalAmount = 0;
+	let totalPrice = 0;
+	
+	console.log( cartGoods )
 	let minimalPrice = 0;
 	let maximumPrise = 0;
 	const range = document.querySelector( '.filter__range' );
@@ -29,8 +31,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 		
 		document.querySelector( '[data-value-min]' ).textContent = minPrice;
-		
-		
 		
 		
 		for ( let item of pr ) {
@@ -204,8 +204,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			};
 		};
 		
-		
-		console.log( maximumPrise, minimalPrice );
 		setPriceLimit ();
 	};
 	
@@ -276,29 +274,35 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	
 	function addToCartEvent ( product ) {
 //		console.log( product )
+		
 		document.querySelector( `[ data-id="${ product.id }" ]` ).addEventListener( 'click', event => {
 			if ( cartGoods.hasOwnProperty( product.id ) ) {
 				cartGoods[ product.id ].quantity += 1; 
 				reRender( cartGoods[product.id] );
+				
 			} else {
 				let { id, title, price, image } = product;
 				cartGoods[ product.id ] = { id, title, price, image };
 				cartGoods[ product.id ].quantity = 1;
 				renderCart( cartGoods[product.id] );
+				// console.log(product)
+				
 			};
-			cartGoods.totalAmount += 1;
+			totalAmount += 1;
 			setTotalAmount ();
 			calculateTotalPrice ( product.price );
+			storage.save ( );
+			// console.log( cartGoods )
 		} );
 	};
 	
 	function setTotalAmount () {
-		document.querySelector( '.cart__quantity' ).textContent = cartGoods.totalAmount;
+		document.querySelector( '.cart__quantity' ).textContent = totalAmount;
 	}
 
 	function renderCart ( item ) {
-//		console.log(item)
-		const cart = document.querySelector( '.cart__list' );	
+		// console.log(item)
+		// const cart = document.querySelector( '.cart__list' );	
 		const cartTotal = document.querySelector( '.cart__total' );	
 		const cartItem = document.createElement( 'div' );
 		cartItem.classList.add( 'cart__item' );
@@ -311,45 +315,104 @@ document.addEventListener( 'DOMContentLoaded', () => {
 								</div>
 								<div class="cart__delete"><i class="far fa-trash-alt"></i></div>`;
 		deleteCart ( cartItem );
+		
 	};
 
+	
+
 	function deleteCart ( cartItem ) {
-		
+		console.log( cartItem )
 		const deleteBtn = cartItem.querySelector( '.cart__delete' );
 		
 		deleteBtn.addEventListener( 'click', event => {
-
+			console.log( cartGoods )
 			let quantity = cartGoods[ cartItem.dataset.id].quantity;
+			console.log( quantity )
 			cartItem.remove();
-			cartGoods.totalAmount -= quantity;
+			totalAmount -= quantity;
 			setTotalAmount ();
 			let price = -(cartGoods[ cartItem.dataset.id].price * quantity);
-			calculateTotalPrice ( price )
+			calculateTotalPrice ( price );
 			
-			delete cartGoods[event.target.parentNode.parentNode.dataset.id]
-		} )
-	}
+			delete cartGoods[event.target.parentNode.parentNode.dataset.id];
+			storage.save();
+		} );
+	};
 	
 	function reRender ( item ) {
 		
 		document.querySelector( `[ data-id="${ item.id }" ]` ).querySelector( '.quantity' ).textContent = item.quantity;
 	};
 	
-	let totalPrice = 0;
+	
 	
 	function calculateTotalPrice ( price ) {
 		
 		totalPrice += price;
-		document.querySelector( '.cart__total' ).textContent = 'Total ' + totalPrice;
+		setTotalPrice ();
+
 		
+	};
+	function setTotalPrice () {
+		document.querySelector( '.cart__total' ).textContent = 'Total ' + totalPrice;
 	};
 	
 	
-	
+	const storage = {
+		save () {
+
+			const object = {
+				goods : [],
+			};
+
+			for (const key in cartGoods) {
+				// console.log( cartGoods[key] )
+				object.goods.push( cartGoods[key] );
+			};
+			object.totalPrice = totalPrice;
+			object.totalAmount = totalAmount;
+			
+			// console.log( object )
+
+			const json = JSON.stringify( object );
+		
+			localStorage.setItem( 'witeCode', json );
+			
+		},
+
+		load () {
+			if ( !localStorage.getItem( 'witeCode' ) ) {
+				return
+			}; 
+			const object = JSON.parse( localStorage.getItem( 'witeCode' ) );
+			console.log( object );
+			
+			for ( let i = 0 ; i < object.goods.length ; i++ ) {
+				// console.log(object.goods[i])
+				cartGoods[ object.goods[i].id ] = object.goods[i];
+				
+			}
+			console.log(cartGoods);
+
+			totalPrice = object.totalPrice;
+			setTotalPrice ();
+			totalAmount = object.totalAmount;
+			setTotalAmount ();
+
+			for ( let key in cartGoods ) {
+				renderCart ( cartGoods[key] )
+			};
+
+		},
+	};
+
+
 
 	
 	
 	getGoods ( url );
+
+	storage.load();
 } );
 
 
