@@ -244,7 +244,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 						<div class="item__add" data-item-id="${ product.id }">
 							<a href="#" class="add"><img src="img/Forma%201%20copy.svg" alt="">Add to Cart</a>
 						</div>`;
-		
+		showItem( item );
 		addToCartEvent( product );
 	};
 
@@ -412,7 +412,23 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		}  );
 	};
 
-	sort()
+	function showItem ( item ) {
+		item.addEventListener( 'click', event => {
+
+			if ( !event.target.classList.contains( 'add' ) ) {
+				createListing();
+				
+			};
+			
+		} );
+	};
+
+	function createListing () {
+
+		
+
+		console.log( 'ee' );
+	}
 
 	const storage = {
 		save () {
@@ -454,7 +470,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	
 	getGoods ( url );
-
+	sort();
 	storage.load();
 } );
 
