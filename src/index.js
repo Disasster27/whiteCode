@@ -12,50 +12,62 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 	let minimalPrice = 0;
 	let maximumPrise = 0;
-	
-	
-	
-	
-	
-	
 	const range = document.querySelector( '.filter__range' );
 	
-//	range.querySelectorAll( '[data-value-min]' );
-//	
-//	console.log( range.querySelector( '[data-value-min]' ) )
-	
-	
-//	range.querySelectorAll( '.filter__prise' ).forEach( element => {
-//		element
-//		console.log( element )
-//		element.textContent = element.attributes[1].value;
-//	} );
 	
 	function drawPriceLeft () {
 		let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
 		let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
 		let totall = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
+		let priceRange = max - min;
+		let pr = document.querySelectorAll( '.item__price' );
 		
-		console.log( typeof(min) )
 		
 		let part = parseFloat( styleLeft ) / ( totall / 100 ); 
-		let priceRange = max - min;
 		let minPrice = Math.round( +min + ( priceRange * ( part / 100 ) ) );
 		
-		console.log( minPrice )
+
 		
 		document.querySelector( '[data-value-min]' ).textContent = minPrice;
+		
+		
+		
+		
+		for ( let item of pr ) {
+			if ( item.textContent < minPrice ) {
+//				console.log( item )
+				item.closest( '.item' ).classList.add( 'not-available' );
+			} else {
+				item.closest( '.item' ).classList.remove( 'not-available' );
+			};
+		};	
 	};
+	
 	function drawPriceRight () {
 		let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
 		let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
 		let totall = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
+		let priceRange = max - min;
+		let pr = document.querySelectorAll( '.item__price' );
+		
 		
 		let part = parseFloat( styleRight ) / ( totall / 100 ); 
-		let priceRange = max - min;
 		let maxPrice = Math.round( max - ( priceRange * ( part / 100 ) ) );
 		
+		
 		document.querySelector( '[data-value-max]' ).textContent = maxPrice;
+		
+		
+		for ( let item of pr ) {
+			if ( item.textContent > maxPrice ) {
+//				console.log( item )
+				item.closest( '.item' ).classList.add( 'not-available' );
+			} else {
+				item.closest( '.item' ).classList.remove( 'not-available' );
+			};
+		};
+		
+		
 	};
 	
 	range.addEventListener( 'mousedown', event => {
@@ -76,10 +88,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		
 		const btn = event.target;
 		btn.style.zIndex = 7;
-		let posCss = btn.style.left ? parseFloat( btn.style.left ) : parseFloat( getComputedStyle( btn ).left );
 		let pagePos = event.pageX;
 		let newPagePos;
 		let newPosCss;
+		
+		
+		let posCss = btn.style.left ? parseFloat( btn.style.left ) : parseFloat( getComputedStyle( btn ).left );
+		
+		
 		
 		btn.addEventListener( 'mousemove', event => {
 			if ( isMove ) {
@@ -88,11 +104,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				btn.style.left = newPosCss + 'px';
 				styleLeft = btn.style.left;
 				
-		setBetweenLeft(  ); 
-		drawPriceLeft();		
-				
+				setBetween(); 
+				drawPriceLeft();		
 				if ( parseFloat( styleLeft ) < 0  ) {
-					
 					isMove = false;
 					return
 				};
@@ -109,10 +123,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		
 		const btn = event.target;
 		btn.style.zIndex = 7;
-		let posCss = btn.style.right ? parseFloat( btn.style.right ) : parseFloat( getComputedStyle( btn ).right );
 		let pagePos = event.pageX;
 		let newPagePos;
 		let newPosCss;
+		
+		let posCss = btn.style.right ? parseFloat( btn.style.right ) : parseFloat( getComputedStyle( btn ).right );
+		
+		
 		
 		btn.addEventListener( 'mousemove', event => {
 			if ( isMove ) {
@@ -121,7 +138,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				btn.style.right = newPosCss + 'px';
 				styleRight = btn.style.right;
 				
-				setBetweenRight ();
+				setBetween ();
 				drawPriceRight();
 				if ( parseFloat( styleRight ) < 0  ) {
 					isMove = false;
@@ -136,19 +153,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	};
 	
-	function setBetweenLeft () {
+	function setBetween () {
 		const between = document.querySelector( '.range__between' );	
 		const totallWidth = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
 		between.style.left = styleLeft;
 		between.style.width = (totallWidth - parseFloat( styleLeft ) - parseFloat( styleRight )) + 'px';
 	};
-	
-	function setBetweenRight () {
-		const between = document.querySelector( '.range__between' );	
-		const totallWidth = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
-//		between.style.right = styleRight;
-		between.style.width = (totallWidth - parseFloat( styleLeft ) - parseFloat( styleRight )) + 'px';
-	}
 
 	
 	const checkAvailable = document.querySelector( '.filter__checkbox' );
@@ -223,7 +233,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 							<img src="${ product.image }" alt="image" class="item__img">
 							<div class="item__footer">
 								<p class="item__named">${ product.title }</p>
-								<p class="item__prise">${ product.price }</p>
+								<p class="item__price">${ product.price }</p>
 							</div>
 						</a>
 						<div class="item__add" data-id="${ product.id }">
@@ -265,18 +275,20 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 	
 	function addToCartEvent ( product ) {
+//		console.log( product )
 		document.querySelector( `[ data-id="${ product.id }" ]` ).addEventListener( 'click', event => {
 			if ( cartGoods.hasOwnProperty( product.id ) ) {
 				cartGoods[ product.id ].quantity += 1; 
 				reRender( cartGoods[product.id] );
 			} else {
-				let { id, title, price } = product;
-				cartGoods[ product.id ] = { id, title, price };
+				let { id, title, price, image } = product;
+				cartGoods[ product.id ] = { id, title, price, image };
 				cartGoods[ product.id ].quantity = 1;
 				renderCart( cartGoods[product.id] );
 			};
 			cartGoods.totalAmount += 1;
 			setTotalAmount ();
+			calculateTotalPrice ( product.price );
 		} );
 	};
 	
@@ -285,19 +297,51 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	}
 
 	function renderCart ( item ) {
+//		console.log(item)
 		const cart = document.querySelector( '.cart__list' );	
+		const cartTotal = document.querySelector( '.cart__total' );	
 		const cartItem = document.createElement( 'div' );
 		cartItem.classList.add( 'cart__item' );
 		cartItem.setAttribute( 'data-id', `${ item.id }` )
-		cart.insertAdjacentElement( 'beforeend', cartItem );
-		cartItem.innerHTML = `<p>${ item.title }</p>
-							<p>${ item.price }</p>
-							<p class="quantity">${ item.quantity }</p>
-							<span>delete</span>`;
+		cartTotal.insertAdjacentElement( 'beforebegin', cartItem );
+		cartItem.innerHTML = `<img src="${ item.image }" alt="image" class="cart__image">
+								<div class="cart__title">
+									<a href="#" class="cart__link">${ item.title }</a>
+									<p class="cart__price"><span class="quantity">${ item.quantity }</span> ×  ${ item.price }</p>
+								</div>
+								<div class="cart__delete"><i class="far fa-trash-alt"></i></div>`;
+		deleteCart ( cartItem );
 	};
+
+	function deleteCart ( cartItem ) {
+		
+		const deleteBtn = cartItem.querySelector( '.cart__delete' );
+		
+		deleteBtn.addEventListener( 'click', event => {
+
+			let quantity = cartGoods[ cartItem.dataset.id].quantity;
+			cartItem.remove();
+			cartGoods.totalAmount -= quantity;
+			setTotalAmount ();
+			let price = -(cartGoods[ cartItem.dataset.id].price * quantity);
+			calculateTotalPrice ( price )
+			
+			delete cartGoods[event.target.parentNode.parentNode.dataset.id]
+		} )
+	}
 	
 	function reRender ( item ) {
+		
 		document.querySelector( `[ data-id="${ item.id }" ]` ).querySelector( '.quantity' ).textContent = item.quantity;
+	};
+	
+	let totalPrice = 0;
+	
+	function calculateTotalPrice ( price ) {
+		
+		totalPrice += price;
+		document.querySelector( '.cart__total' ).textContent = 'Total ' + totalPrice;
+		
 	};
 	
 	

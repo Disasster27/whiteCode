@@ -65,15 +65,50 @@
 	}
 	&__list {
 		position: absolute;
+		display: flex;
+		flex-direction: column;
 		right: 0;
-		height: 100px;
-		width: 100px;
-		background-color: bisque;
+//		height: 100px;
+		width: 300px;
+		background-color: #eaeaea;
 		z-index: 5;
-		display: none;
+//		display: none;
 	}
 	&__item {
-		background-color: coral;
+		display: flex;
+		justify-content: space-between;
+		background-color: #eaeaea;
+		border-bottom: 1px solid #d2d2d2;
+	}
+	&__image {
+		height: 100px;
+	}
+	&__title {
+		padding: 10px 0;
+		height: inherit;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		
+	}
+	&__link {
+		text-decoration: none;
+		&:hover {
+			color: coral;
+		}
+	}
+	&__price {
+		
+	}
+	&__delete {
+		width: 30px;
+		text-align: center;
+		line-height: 100px;
+		font-size: 20px;
+		&:hover {
+			cursor: pointer;
+			color: #464646;
+		}
 	}
 }
 
@@ -151,6 +186,7 @@
     position: relative;
     margin-bottom: 39px;
 	margin-left: 15px;
+	box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.35);
 }
 .item:hover{
     box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.16);
