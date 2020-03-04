@@ -6,7 +6,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	let url = 'https://api.myjson.com/bins/cyod6';
 	let amountElements = 15;
 	let pages = 0;
-	// const product = [];
+	let product = [];
 	const cartGoods = {};
 	let totalAmount = 0;
 	let totalPrice = 0;
@@ -181,6 +181,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			.then( data => {
 				countPages( data );
 				renderCatalog ( data );
+				toArr ( data );
 			} );
 	};
 	
@@ -309,6 +310,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		for ( let key in goods ) {
 			goodsArray.push( goods[key] );
 		};
+		product = goodsArray ;
+		// console.log( product )
 		return goodsArray;
 	}
 	
@@ -391,7 +394,27 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		document.querySelector( '.cart__total' ).textContent = 'Total ' + totalPrice;
 	};
 	
-	
+	function sort () {
+		let input = document.querySelector( '.filter__input' );
+		 
+		document.querySelector( '.filter__text' ).addEventListener( 'submit', event => {
+			event.preventDefault();
+			let inputValue = input.value.trim();
+			const regex = new RegExp( inputValue, 'i' );
+			
+			let suitableElem = product.filter( elem =>  regex.test( elem.title ) );
+			
+
+			console.log( suitableElem )
+		}  )
+
+		// const regex = new RegExp( inputValue, 'i' );
+
+		// console.log( product )
+	};
+
+	sort()
+
 	const storage = {
 		save () {
 
