@@ -36,11 +36,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
 		let totall = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
 		
-		console.log( min )
+		console.log( typeof(min) )
 		
 		let part = parseFloat( styleLeft ) / ( totall / 100 ); 
 		let priceRange = max - min;
-		let minPrice = Math.round( min + ( priceRange * ( part / 100 ) ) );
+		let minPrice = Math.round( +min + ( priceRange * ( part / 100 ) ) );
 		
 		console.log( minPrice )
 		
