@@ -11,7 +11,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	let totalAmount = 0;
 	let totalPrice = 0;
 	
-	console.log( cartGoods )
+	// console.log( cartGoods )
 	let minimalPrice = 0;
 	let maximumPrise = 0;
 	const range = document.querySelector( '.filter__range' );
@@ -189,13 +189,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		minimalPrice = data[ 1 ].price;
 		let keysArr = Object.keys(data)
 		// console.log( Object.keys(data) )
-		for ( let i = 1 ; i < AllElem ; i++) {
-//			console.log( data[ i ].price )
+		
 
-			let actualElem = data[ i ].price;
-			let nextElem =  data[ i + 1 ].price;
+		for ( let i = 0 ; i < keysArr.length - 1 ; i++) {
 
-			console.log( actualElem, nextElem )
+			let actualElem = data[ keysArr[i] ].price;
+			
+			let nextElem =  data[ keysArr[ (i + 1) ] ].price;
 			
 			if ( actualElem > nextElem ) {
 				maximumPrise = actualElem > maximumPrise ? actualElem : maximumPrise;
@@ -254,10 +254,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	}	
 
 	function countPages ( allGoods ) {
+		// console.log( allGoods )
 		const allElem = Object.keys( allGoods ).length;
 		pages = Math.ceil( allElem/amountElements );
 		setPagination ();
 		getPriceRange( allGoods, allElem );
+		addPaginationEvent( allGoods );
 	};
 	
 	function setPagination () {
@@ -266,6 +268,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const pageNumber = document.createElement( 'a' );
 			pageNumber.classList.add( 'pagination__page-number' );
 			pageNumber.setAttribute( 'href', '#' );
+			pageNumber.setAttribute( 'data-page-number', `${ i }` );
 			pageNumber.textContent = i;
 			paginationBlock.insertAdjacentElement( 'beforeend', pageNumber );
 		};
@@ -277,6 +280,37 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			paginationBlock.insertAdjacentElement( 'beforeend', pageNumber );
 		};
 	};
+
+	function addPaginationEvent( allGoods ) {
+		
+		document.querySelectorAll( '[data-page-number]' ).forEach( elem => {
+			elem.addEventListener( 'click', event => {
+				let start = amountElements * (elem.dataset.pageNumber - 1 );
+				let end = amountElements * elem.dataset.pageNumber ;
+				// console.log(  start, end  )
+				let arr = toArr ( allGoods ).slice( start, end )
+				// console.log( arr )
+				reRenderItem ( arr );
+			} );
+		} );
+	};
+
+	function reRenderItem ( arr ) {
+		document.querySelectorAll( '.item' ).forEach( elem => {
+			elem.remove();
+		} )
+		for ( let i = 0 ; i < arr.length ; i++ ) {
+			renderItem ( arr[ i ] );
+		}
+	}
+
+	function toArr ( goods ) {
+		const goodsArray = [];
+		for ( let key in goods ) {
+			goodsArray.push( goods[key] );
+		};
+		return goodsArray;
+	}
 	
 	function addToCartEvent ( product ) {
 //		console.log( product )
@@ -366,18 +400,13 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			};
 
 			for (const key in cartGoods) {
-				// console.log( cartGoods[key] )
 				object.goods.push( cartGoods[key] );
 			};
 			object.totalPrice = totalPrice;
 			object.totalAmount = totalAmount;
-			
-			// console.log( object )
 
 			const json = JSON.stringify( object );
-		
 			localStorage.setItem( 'witeCode', json );
-			
 		},
 
 		load () {
@@ -385,14 +414,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				return
 			}; 
 			const object = JSON.parse( localStorage.getItem( 'witeCode' ) );
-			console.log( object );
 			
 			for ( let i = 0 ; i < object.goods.length ; i++ ) {
-				// console.log(object.goods[i])
 				cartGoods[ object.goods[i].id ] = object.goods[i];
-				
 			}
-			console.log(cartGoods);
 
 			totalPrice = object.totalPrice;
 			setTotalPrice ();
@@ -400,10 +425,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			setTotalAmount ();
 
 			for ( let key in cartGoods ) {
-				// console.log( cartGoods[key] )
 				renderCart ( cartGoods[key] )
 			};
-
 		},
 	};
 
