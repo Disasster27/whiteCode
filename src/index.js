@@ -72,76 +72,118 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	range.addEventListener( 'mousedown', event => {
 		if ( event.target.classList.contains( 'range__button-left' ) ) {
 			let isMove = true;
-			setPositionLeft( event, isMove );
+			setPosition ( 'left', event, isMove );           //
 		};
 		if ( event.target.classList.contains( 'range__button-right' ) ) {
 			let isMove = true;
-			setPositionRight( event, isMove );
+			setPosition ( 'right', event, isMove );           //
 		};
 	} ) ;
 	
+	
+	
+	// function setPositionLeft ( event, isMove ) {
+		
+	// 	const btn = event.target;
+	// 	btn.style.zIndex = 7;
+	// 	let pagePos = event.pageX;
+	// 	let newPagePos;
+	// 	let newPosCss;
+		
+		
+	// 	let posCss = btn.style.left ? parseFloat( btn.style.left ) : parseFloat( getComputedStyle( btn ).left );
+		
+		
+		
+	// 	btn.addEventListener( 'mousemove', event => {
+	// 		if ( isMove ) {
+	// 			newPagePos =  pagePos - event.pageX ;
+				
+	// 			newPosCss = newPagePos < 0 ? posCss + Math.abs( newPagePos ) : posCss - Math.abs( newPagePos );
+	// 		 // newPosCss = newPagePos < 0 ? posCss - Math.abs( newPagePos ) : posCss + Math.abs( newPagePos );
+	// 			btn.style.left = newPosCss + 'px';
+	// 			styleLeft = btn.style.left;
+				
+	// 			setBetween(); 
+	// 			drawPriceLeft();		
+	// 			if ( parseFloat( styleLeft ) < 0  ) {
+	// 				isMove = false;
+	// 				return
+	// 			};
+	// 		}
+	// 	} );
+
+	// 	btn.addEventListener('mouseup', event => {
+	// 		isMove = false;
+	// 		btn.style.zIndex = 1;
+	// 	} );	
+	// };
+	
+	// function setPositionRight ( event, isMove ) {
+		
+	// 	const btn = event.target;
+	// 	btn.style.zIndex = 7;
+	// 	let pagePos = event.pageX;
+	// 	let newPagePos;
+	// 	let newPosCss;
+		
+	// 	let posCss = btn.style.right ? parseFloat( btn.style.right ) : parseFloat( getComputedStyle( btn ).right );      // r/l
+		
+
+	// 	btn.addEventListener( 'mousemove', event => {
+	// 		if ( isMove ) {
+	// 			newPagePos =  pagePos - event.pageX ;
+
+	// 			newPosCss = newPagePos < 0 ? posCss - Math.abs( newPagePos ) : posCss + Math.abs( newPagePos );             //        -/+
+	// 			btn.style.right = newPosCss + 'px';    // r/l
+
+	// 			styleRight = btn.style.right;    // r/l
+				
+	// 			setBetween ();
+	// 			drawPriceRight();
+	// 			if ( parseFloat( styleRight ) < 0  ) {
+	// 				isMove = false;
+	// 				return
+	// 			};
+	// 		}
+	// 	} );
+
+	// 	btn.addEventListener('mouseup', event => {
+	// 		isMove = false;
+	// 		btn.style.zIndex = 1;
+	// 	} );
+	// };
+
 	let styleLeft = 0;
 	let styleRight = 0;
-	
-	function setPositionLeft ( event, isMove ) {
+
+	function setPosition ( direction, event, isMove ) {
 		
 		const btn = event.target;
 		btn.style.zIndex = 7;
 		let pagePos = event.pageX;
 		let newPagePos;
-		let newPosCss;
+		let newPosCss;		
 		
-		
-		let posCss = btn.style.left ? parseFloat( btn.style.left ) : parseFloat( getComputedStyle( btn ).left );
-		
-		
-		
-		btn.addEventListener( 'mousemove', event => {
-			if ( isMove ) {
-				newPagePos =  pagePos - event.pageX ;
-				
-				newPosCss = newPagePos < 0 ? posCss + Math.abs( newPagePos ) : posCss - Math.abs( newPagePos );
-				btn.style.left = newPosCss + 'px';
-				styleLeft = btn.style.left;
-				
-				setBetween(); 
-				drawPriceLeft();		
-				if ( parseFloat( styleLeft ) < 0  ) {
-					isMove = false;
-					return
-				};
-			}
-		} );
-
-		btn.addEventListener('mouseup', event => {
-			isMove = false;
-			btn.style.zIndex = 1;
-		} );	
-	};
-	
-	function setPositionRight ( event, isMove ) {
-		
-		const btn = event.target;
-		btn.style.zIndex = 7;
-		let pagePos = event.pageX;
-		let newPagePos;
-		let newPosCss;
-		
-		let posCss = btn.style.right ? parseFloat( btn.style.right ) : parseFloat( getComputedStyle( btn ).right );
-		
+		let posCss = btn.style[direction] ? parseFloat( btn.style[direction] ) : parseFloat( getComputedStyle( btn )[direction] );      
 
 		btn.addEventListener( 'mousemove', event => {
 			if ( isMove ) {
+
 				newPagePos =  pagePos - event.pageX ;
 
-				newPosCss = newPagePos < 0 ? posCss - Math.abs( newPagePos ) : posCss + Math.abs( newPagePos );
-				btn.style.right = newPosCss + 'px';
-				
-				styleRight = btn.style.right;
+				direction == 'right' ? (newPosCss = newPagePos < 0 ? posCss - Math.abs( newPagePos ) : posCss + Math.abs( newPagePos )) : (newPosCss = newPagePos < 0 ? posCss + Math.abs( newPagePos ) : posCss - Math.abs( newPagePos )) ;
+          
+				btn.style[direction] = newPosCss + 'px';   
+
+				direction == 'right' ? styleRight = btn.style[direction] : styleLeft = btn.style[direction];
 				
 				setBetween ();
-				drawPriceRight();
-				if ( parseFloat( styleRight ) < 0  ) {
+
+				direction == 'right' ? drawPriceRight() : drawPriceLeft();
+
+				let limit = direction == 'right' ? styleRight : styleLeft;
+				if ( parseFloat( limit ) < 0  ) {  
 					isMove = false;
 					return
 				};
@@ -152,8 +194,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			isMove = false;
 			btn.style.zIndex = 1;
 		} );
-	};
-	
+	}
+ 	
 	function setBetween () {
 		const between = document.querySelector( '.range__between' );	
 		const totalWidth = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
