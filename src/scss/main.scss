@@ -408,7 +408,11 @@ body {
 	height: 150px;
 }
 
+
 .not-available {
+	filter: brightness(50%);
+}
+.not-suitable {
 	filter: brightness(70%);
 }
 .lock {

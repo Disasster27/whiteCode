@@ -14,33 +14,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	let minimalPrice = 0;
 	let maximumPrise = 0;
 	const range = document.querySelector( '.filter__range' );
-	
-	
-	// function drawPriceLeft () {
-	// 	let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
-	// 	let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
-	// 	let total = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
-	// 	let priceRange = max - min;
-	// 	let pr = document.querySelectorAll( '.item__price' );
-		
-		
-	// 	let part = parseFloat( styleLeft ) / ( total / 100 ); 
 
-	// 	let minPrice = Math.round( +min + ( priceRange * ( part / 100 ) ) );
-		
 
-		
-	// 	document.querySelector( '[data-value-min]' ).textContent = minPrice;
-		
-		
-	// 	for ( let item of pr ) {
-	// 		if ( item.textContent < minPrice ) {
-	// 			item.closest( '.item' ).classList.add( 'not-available' );
-	// 		} else {
-	// 			item.closest( '.item' ).classList.remove( 'not-available' );
-	// 		};
-	// 	};	
-	// };
+	// отрисовывает цены в ползунке при изменении диапазона
 
 	function drawPrice ( direction ) {
 		let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
@@ -62,38 +38,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		
 		for ( let item of pr ) {
 			if ( item.textContent > maxPrice || item.textContent < minPrice ) { //
-				item.closest( '.item' ).classList.add( 'not-available' );
+				item.closest( '.item' ).classList.add( 'not-suitable' );
 			} else {
-				item.closest( '.item' ).classList.remove( 'not-available' );
+				item.closest( '.item' ).classList.remove( 'not-suitable' );
 			};
 		};
-	}
+	};
 	
-	// function drawPriceRight () {
-	// 	let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
-	// 	let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
-	// 	let total = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
-	// 	let priceRange = max - min;
-	// 	let pr = document.querySelectorAll( '.item__price' );
-		
-		
-	// 	let part = parseFloat( styleRight ) / ( total / 100 );  //
+	// вешает события на ползунки
 
-	// 	let maxPrice = Math.round( +max - ( priceRange * ( part / 100 ) ) ); //
-		
-		
-	// 	document.querySelector( '[data-value-max]' ).textContent = maxPrice; //
-		
-		
-	// 	for ( let item of pr ) {
-	// 		if ( item.textContent > maxPrice ) { //
-	// 			item.closest( '.item' ).classList.add( 'not-available' );
-	// 		} else {
-	// 			item.closest( '.item' ).classList.remove( 'not-available' );
-	// 		};
-	// 	};
-	// };
-	
 	range.addEventListener( 'mousedown', event => {
 		if ( event.target.classList.contains( 'range__button-left' ) ) {
 			let isMove = true;
@@ -105,82 +58,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 	} ) ;
 	
-	
-	
-	// function setPositionLeft ( event, isMove ) {
-		
-	// 	const btn = event.target;
-	// 	btn.style.zIndex = 7;
-	// 	let pagePos = event.pageX;
-	// 	let newPagePos;
-	// 	let newPosCss;
-		
-		
-	// 	let posCss = btn.style.left ? parseFloat( btn.style.left ) : parseFloat( getComputedStyle( btn ).left );
-		
-		
-		
-	// 	btn.addEventListener( 'mousemove', event => {
-	// 		if ( isMove ) {
-	// 			newPagePos =  pagePos - event.pageX ;
-				
-	// 			newPosCss = newPagePos < 0 ? posCss + Math.abs( newPagePos ) : posCss - Math.abs( newPagePos );
-	// 		 // newPosCss = newPagePos < 0 ? posCss - Math.abs( newPagePos ) : posCss + Math.abs( newPagePos );
-	// 			btn.style.left = newPosCss + 'px';
-	// 			styleLeft = btn.style.left;
-				
-	// 			setBetween(); 
-	// 			drawPriceLeft();		
-	// 			if ( parseFloat( styleLeft ) < 0  ) {
-	// 				isMove = false;
-	// 				return
-	// 			};
-	// 		}
-	// 	} );
-
-	// 	btn.addEventListener('mouseup', event => {
-	// 		isMove = false;
-	// 		btn.style.zIndex = 1;
-	// 	} );	
-	// };
-	
-	// function setPositionRight ( event, isMove ) {
-		
-	// 	const btn = event.target;
-	// 	btn.style.zIndex = 7;
-	// 	let pagePos = event.pageX;
-	// 	let newPagePos;
-	// 	let newPosCss;
-		
-	// 	let posCss = btn.style.right ? parseFloat( btn.style.right ) : parseFloat( getComputedStyle( btn ).right );      // r/l
-		
-
-	// 	btn.addEventListener( 'mousemove', event => {
-	// 		if ( isMove ) {
-	// 			newPagePos =  pagePos - event.pageX ;
-
-	// 			newPosCss = newPagePos < 0 ? posCss - Math.abs( newPagePos ) : posCss + Math.abs( newPagePos );             //        -/+
-	// 			btn.style.right = newPosCss + 'px';    // r/l
-
-	// 			styleRight = btn.style.right;    // r/l
-				
-	// 			setBetween ();
-	// 			drawPriceRight();
-	// 			if ( parseFloat( styleRight ) < 0  ) {
-	// 				isMove = false;
-	// 				return
-	// 			};
-	// 		}
-	// 	} );
-
-	// 	btn.addEventListener('mouseup', event => {
-	// 		isMove = false;
-	// 		btn.style.zIndex = 1;
-	// 	} );
-	// };
+	// координаты позиционирования ползунков
 
 	let styleLeft = 0;
 	let styleRight = 0;
+
+	// устанавливает координаты ползунка при перемещении
 
 	function setPosition ( direction, event, isMove ) {
 		
@@ -204,8 +87,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				direction == 'right' ? styleRight = btn.style[direction] : styleLeft = btn.style[direction];
 				
 				setBetween ();
-
-				// direction == 'right' ? drawPriceRight() : drawPriceLeft();
 				drawPrice ( direction )
 
 				let limit = direction == 'right' ? styleRight : styleLeft;
@@ -220,8 +101,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			isMove = false;
 			btn.style.zIndex = 1;
 		} );
-	}
- 	
+	};
+	 
+	// отрисовывает полоску между ползунками
+
 	function setBetween () {
 		const between = document.querySelector( '.range__between' );	
 		const totalWidth = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
@@ -229,7 +112,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		between.style.width = (totalWidth - parseFloat( styleLeft ) - parseFloat( styleRight )) + 'px';
 	};
 
-	
+	// отмечает элементы со значением available : false
+
 	const checkAvailable = document.querySelector( '.filter__checkbox' );
 	checkAvailable.addEventListener( 'click', event => {
 		if ( checkAvailable.checked ) {
@@ -243,16 +127,19 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 	} );
 	
+	// получение всех товаров
 
 	function getGoods ( url ) {
 		fetch( url )
 			.then( data => data.json() )
 			.then( data => {
 				countPages( data );
-				renderCatalog ( data );
+				initModal ( data );
 				toArr ( data );
 			} );
 	};
+
+	// получение макс. и мин. значения цены
 	
 	function getPriceRange ( data, AllElem ) {
 		
@@ -278,16 +165,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 		setPriceLimit ();
 	};
+
+	// установка макс. и мин. значения цены
 	
 	function setPriceLimit () {
-		range.querySelectorAll( '[data-value-min]' );
 		range.querySelector( '[data-value-min]' ).setAttribute( 'data-value-min', minimalPrice );
 		range.querySelector( '[data-value-min]' ).textContent = minimalPrice;
-		range.querySelectorAll( '[data-value-max]' );
 		range.querySelector( '[data-value-max]' ).setAttribute( 'data-value-max', maximumPrise );
 		range.querySelector( '[data-value-max]' ).textContent = maximumPrise;
 
-	}
+	};
+
+	// отрисовка карточки товара
 
 	function renderItem ( product ) {
 		let itemBlock = document.querySelector( '.catalog' );
@@ -310,7 +199,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		addToCartEvent( item, product );
 	};
 
-	
+	// подсчёт колличества страниц в пагинации
 
 	function countPages ( allGoods ) {
 		const allElem = Object.keys( allGoods ).length;
@@ -320,6 +209,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		addPaginationEvent( allGoods );
 	};
 	
+	// отрисовка пагинации 
+
 	function setPagination () {
 		const paginationBlock = document.querySelector( '.pagination' );
 		for ( let i = 1 ; i <= pages ; i++ ) {
@@ -339,6 +230,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 	};
 
+	// установка обработчиков на пагинации
+
 	function addPaginationEvent( allGoods ) {
 		
 		document.querySelectorAll( '[data-page-number]' ).forEach( elem => {
@@ -351,13 +244,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	};
 
-	function renderCatalog ( goods ) {
-		document.querySelector( '.modal' ).querySelector( '.modal__add' ).addEventListener( 'click', ( event ) => {
-			// const interimElem = product.filter( elem => elem.id == event.toElement.dataset.itemId );
+	// инициализация окна товара
+
+	function initModal ( goods ) {
+		document.querySelector( '.modal__add' ).addEventListener( 'click', ( event ) => {
 			const interimElem =  forIn ( event.toElement.dataset.itemId, product );
 			addToCart( interimElem );
 			
-			// console.log( cartGoods )
+			console.log( 12 )
 			setQuantityList (interimElem.id);
 		} );
 		for ( let i = 1 ; i <= amountElements ; i++ ) {
@@ -365,15 +259,16 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 	};	
 
+	// отрисовка колличества товара в окне товара
+
 	function setQuantityList (id) {
-		// console.log( 'id ',id )
 		let quantity = forIn ( id, cartGoods ).quantity;
 		
 		const quan = document.querySelector( '.modal__quantity' );
 		quan.textContent = quantity;
-
-		console.log( quantity )
 	};
+
+	// перерисовка карточек товара
 
 	function reRenderItem ( arr ) {
 		document.querySelectorAll( '.item' ).forEach( elem => {
@@ -384,20 +279,26 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 	};
 
+	// получение массива всех товаров
+
 	function toArr ( goods ) {
-		const goodsArray = [];
+		// const goodsArray = [];
 		for ( let key in goods ) {
-			goodsArray.push( goods[key] );
+			product.push( goods[key] );
 		};
-		product = goodsArray ;
-		return goodsArray;
+		// product = goodsArray ;
+		// return goodsArray;
 	};
+
+	// установка обработчика на кнопке корточки товара для добавления в корзину 
 	
 	function addToCartEvent ( item, product ) {
 		item.querySelector( `[ data-item-id="${ product.id }" ]` ).addEventListener( 'click', event => {
 			addToCart (  product );
 		} );
 	};
+
+	//добавление товара в корзину и подсчёт общего колличества
 
 	function addToCart (  product ) {
 		if ( cartGoods.hasOwnProperty( product.id ) ) {
@@ -415,11 +316,15 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		setTotalAmount ();
 		calculateTotalPrice ( product.price );
 		storage.save ( );
-	}
+	};
+
+	// отрисовка общего колличества товара в корзине
 	
 	function setTotalAmount () {
 		document.querySelector( '.cart__quantity' ).textContent = totalAmount;
 	};
+
+	// отрисовка элемента товара в корзине
 
 	function renderCart ( item ) {	
 		const cartTotal = document.querySelector( '.cart__total' );	
@@ -436,7 +341,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		deleteCart ( cartItem );
 	};
 
-	
+	// удаление товара из корзины
 
 	function deleteCart ( cartItem ) {
 		const deleteBtn = cartItem.querySelector( '.cart__delete' );
@@ -454,23 +359,29 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			storage.save();
 		} );
 	};
+
+	// перерисовка в корзине колличества и и общей цены конкретного товара при их изменении 
 	
 	function reRender ( item ) {
 		document.querySelector( `[ data-cart-id="${ item.id }" ]` ).querySelector( '.quantity' ).textContent = item.quantity;
 		document.querySelector( `[ data-cart-id="${ item.id }" ]` ).querySelector( '.item-total' ).textContent = item.quantity * item.price;
-		
-
-		
 	};
+
+	// подсчёт общей цены всех таваров
 	
 	function calculateTotalPrice ( price ) {
 		totalPrice += price;
 		setTotalPrice ();
 	};
+
+	// отрисовка итоговой суммы к корзине
+
 	function setTotalPrice () {
 		document.querySelector( '.cart__total-price' ).textContent = totalPrice;
 	};
 	
+	// сортировка по имени
+
 	function sort () {
 		let input = document.querySelector( '.filter__input' );
 		let suitableElem =[];
@@ -480,10 +391,17 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			let inputValue = input.value.trim();
 			const regex = new RegExp( inputValue, 'i' );
 			suitableElem = product.filter( elem =>  regex.test( elem.title ) );
-			reRenderItem ( suitableElem );
+			console.log( suitableElem )
+			if ( suitableElem.length ) {
+				reRenderItem ( suitableElem );
+			} else {
+				alert( 'ничего не найдено' )
+			}
 			input.value = '';
 		}  );
 	};
+
+	// вывод окна товара по нажатию на элемент товара
 
 	function showItem ( item ) {
 		item.addEventListener( 'click', event => {
@@ -495,10 +413,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		} );
 	};
 
+	// отрисовка окна товара
+
 	function createListing ( item, e ) {
-		
 		// const interimElem = product.filter( elem => elem.id == item.lastElementChild .dataset.itemId );
-		// const interimElem =  forIn ( item.lastElementChild.dataset.itemId, product );
 		const interimElem =  forIn ( e.toElement.offsetParent.lastElementChild.dataset.itemId, product );
 		const modal = document.querySelector( '.modal' );
 		modal.classList.remove( 'invisible' );
@@ -506,9 +424,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		modal.querySelector( '.modal__close' ).addEventListener( 'click', event => {
 			document.querySelector( 'body' ).classList.remove( 'lock' );
 			modal.classList.add( 'invisible' );
-
 		} );
 	};
+
+	// установка параметров конкретного товара в окне товара
 
 	function setInfo ( product ) {
 		const image = document.querySelector( '.modal__image-main' );
@@ -525,6 +444,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		quantity.textContent = forIn ( product.id, cartGoods ) ? forIn ( product.id, cartGoods ).quantity : '0';
 	};
 
+	// вместо фильтр:((
+
 	function forIn ( id, object ) {
 		let elem = null;
 		for ( let key in object ) {
@@ -534,6 +455,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 		return elem;
 	};
+
+	// localStorage
 
 	const storage = {
 		save () {
