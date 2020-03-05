@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="./assets/css/app.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
 		integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-	<title>Document</title>
+	<title>WiteCode</title>
 </head>
 <body>
 	<header class="header">
@@ -14,24 +15,28 @@
 				<a href="#"><img src="https://via.placeholder.com/150x50" alt="Logo"></a>
 			</div>
 		
-			<form class="search">
+			<!-- <form class="search">
 
 				<input class="search__input" type="text">
 				<button class="search__btn">
 					<i class="fas fa-search"></i>	
 				</button>
-			</form>
+			</form> -->
 			
 			<div class="cart">
-				<div class="cart__quantity">
+				<div class="cart__btn">
+					<div class="cart__quantity">
 					
+					</div> Item(s)
+					<i class="fas fa-shopping-cart"></i>
 				</div>
-				<div class="cart__btn"><i class="fas fa-shopping-cart"></i></div>
 				<div class="cart__list">
 					
-					<div class="cart__total">Total</div>
-					
-					
+					<div class="cart__total">Total
+						<div class="cart__total-price">
+							
+						</div>
+					</div>
 				</div>
 				
 			</div>
@@ -42,24 +47,15 @@
 		<div class="container main__wrapper">
 		
 			<div class="filter">
-			
-				<!-- <select class="filter__select">
-					<option>Name</option>
-					<option>Price</option>
-				</!--> 
 				
 				<form class="filter__text">
 					<input class="filter__input" type="text">
 					<button type="submit" class="filter__search"><i class="fas fa-search"></i></button>	
 				</form>
 				
-				
-				
-				
 				<div class="filter__range">
 				
 					<span class="filter__prise" data-value-min="0"></span>
-					
 					
 					<div class="range">
 						<div class="range__between"></div>
@@ -67,12 +63,10 @@
 						<div class="range__button-right"></div>
 					</div>
 					
-					
 					<span class="filter__prise" data-value-max="1500"></span>
 					
 				</div>
-				
-				
+
 				
 				<div class="filter__available">
 					<input type="checkbox" class="filter__checkbox" id="checkbox"/>
@@ -96,9 +90,11 @@
 								<h3>Title</h3>
 							</div>
 							<div class="modal__descr">
-								<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere perferendis quo nihil, autem perspiciatis modi tempore numquam, harum libero adipisci molestias dicta explicabo repellendus delectus nostrum ratione suscipit beatae voluptate.</p>
+								<span>Description</span>
+								<p class="modal__descr-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere perferendis quo nihil, autem perspiciatis modi tempore numquam, harum libero adipisci molestias dicta explicabo repellendus delectus nostrum ratione suscipit beatae voluptate.</p>
 							</div>
 							<div class="modal__price">
+								<span>Price</span>
 								<div class="modal__price-current">
 									450
 								</div>
@@ -117,15 +113,17 @@
 						</div>
 					</div>
 				</div>
-				
 			</div>
 			
-			<div class="pagination">
-				<a class="pagination__page-number" href="#">«</a>
-
-			</div>
+			
 		</div>
 	</main>
+	<footer class="footer">
+		<div class="pagination">
+			<a class="pagination__page-number" href="#">«</a>
+
+		</div>
+	</footer>
 	<script src="./assets/js/app.js"></script>
 </body>
 </html>
