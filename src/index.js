@@ -25,6 +25,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		
 		
 		let part = parseFloat( styleLeft ) / ( total / 100 ); 
+
 		let minPrice = Math.round( +min + ( priceRange * ( part / 100 ) ) );
 		
 
@@ -50,7 +51,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		
 		
 		let part = parseFloat( styleRight ) / ( total / 100 ); 
-		let maxPrice = Math.round( max - ( priceRange * ( part / 100 ) ) );
+
+		let maxPrice = Math.round( +max - ( priceRange * ( part / 100 ) ) );
 		
 		
 		document.querySelector( '[data-value-max]' ).textContent = maxPrice;
@@ -97,6 +99,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		btn.addEventListener( 'mousemove', event => {
 			if ( isMove ) {
 				newPagePos =  pagePos - event.pageX ;
+				
 				newPosCss = newPagePos < 0 ? posCss + Math.abs( newPagePos ) : posCss - Math.abs( newPagePos );
 				btn.style.left = newPosCss + 'px';
 				styleLeft = btn.style.left;
@@ -126,13 +129,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		
 		let posCss = btn.style.right ? parseFloat( btn.style.right ) : parseFloat( getComputedStyle( btn ).right );
 		
-		
-		
+
 		btn.addEventListener( 'mousemove', event => {
 			if ( isMove ) {
 				newPagePos =  pagePos - event.pageX ;
+
 				newPosCss = newPagePos < 0 ? posCss - Math.abs( newPagePos ) : posCss + Math.abs( newPagePos );
 				btn.style.right = newPosCss + 'px';
+				
 				styleRight = btn.style.right;
 				
 				setBetween ();
@@ -408,8 +412,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			let inputValue = input.value.trim();
 			const regex = new RegExp( inputValue, 'i' );
 			suitableElem = product.filter( elem =>  regex.test( elem.title ) );
-
-			reRenderItem ( suitableElem )
+			reRenderItem ( suitableElem );
+			input.value = '';
 		}  );
 	};
 
@@ -418,6 +422,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			document.querySelector( '.modal__add' ).setAttribute( 'data-item-id', `${ item.children[1].dataset.itemId }` )
 			if ( !event.target.classList.contains( 'add' ) ) {
 				createListing( item, event );
+				document.querySelector( 'body' ).classList.add( 'lock' );
 			};
 		} );
 	};
@@ -431,7 +436,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		modal.classList.remove( 'invisible' );
 		setInfo( interimElem ); 
 		modal.querySelector( '.modal__close' ).addEventListener( 'click', event => {
+			document.querySelector( 'body' ).classList.remove( 'lock' );
 			modal.classList.add( 'invisible' );
+
 		} );
 	};
 
