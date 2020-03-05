@@ -216,11 +216,20 @@
 			transition: all .2s linear;
 		}
 	}
-	&__item{
+	&__image {
+		display: flex;
+		align-items: center;
+	}
+	&__image-main {
+		width: 250px;
+	}
+	&__item {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 40px 10px;
+		width: 50%;
+		// background-color: #f2f2f2;
 	}
 	&__price {
 		display: flex;

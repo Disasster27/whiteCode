@@ -1,4 +1,5 @@
 import './scss/main.scss';
+import { deflateRawSync } from 'zlib';
 
 document.addEventListener( 'DOMContentLoaded', () => {
 
@@ -228,6 +229,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	}
 
 	function renderItem ( product ) {
+		// console.log( product )
 		let itemBlock = document.querySelector( '.catalog' );
 
 		let item = document.createElement( 'div' );
@@ -242,10 +244,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 							</div>
 						</a>
 						<div class="item__add" data-item-id="${ product.id }">
-							<a href="#" class="add"><img src="img/Forma%201%20copy.svg" alt="">Add to Cart</a>
+							<a href="#!" class="add"><img src="img/Forma%201%20copy.svg" alt="">Add to Cart</a>
 						</div>`;
 		showItem( item );
-		addToCartEvent( product );
+		// console.log( item )
+		addToCartEvent( item, product );
 	};
 
 	
@@ -317,29 +320,33 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		return goodsArray;
 	};
 	
-	function addToCartEvent ( product ) {
-//		console.log( product )
+	function addToCartEvent ( item, product ) {
+		console.log(  product.id )
 		
-		document.querySelector( `[ data-item-id="${ product.id }" ]` ).addEventListener( 'click', event => {
-			if ( cartGoods.hasOwnProperty( product.id ) ) {
-				cartGoods[ product.id ].quantity += 1; 
-				reRender( cartGoods[product.id] );
-				
-			} else {
-				let { id, title, price, image } = product;
-				cartGoods[ product.id ] = { id, title, price, image };
-				cartGoods[ product.id ].quantity = 1;
-				renderCart( cartGoods[product.id] );
-				// console.log(product)
-				
-			};
-			totalAmount += 1;
-			setTotalAmount ();
-			calculateTotalPrice ( product.price );
-			storage.save ( );
-			// console.log( cartGoods )
+		item.querySelector( `[ data-item-id="${ product.id }" ]` ).addEventListener( 'click', event => {
+			addToCart (  product );
 		} );
 	};
+
+	function addToCart (  product ) {
+		if ( cartGoods.hasOwnProperty( product.id ) ) {
+			cartGoods[ product.id ].quantity += 1; 
+			reRender( cartGoods[product.id] );
+			
+		} else {
+			let { id, title, price, image } = product;
+			cartGoods[ product.id ] = { id, title, price, image };
+			cartGoods[ product.id ].quantity = 1;
+			renderCart( cartGoods[product.id] );
+			// console.log(product)
+			
+		};
+		totalAmount += 1;
+		setTotalAmount ();
+		calculateTotalPrice ( product.price );
+		storage.save ( );
+		// console.log( cartGoods )
+	}
 	
 	function setTotalAmount () {
 		document.querySelector( '.cart__quantity' ).textContent = totalAmount;
@@ -408,26 +415,49 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			suitableElem = product.filter( elem =>  regex.test( elem.title ) );
 
 			reRenderItem ( suitableElem )
-			console.log( suitableElem )
 		}  );
 	};
 
 	function showItem ( item ) {
-		item.addEventListener( 'click', event => {
 
+		item.addEventListener( 'click', event => {
+			document.querySelector( '.modal__add' ).setAttribute( 'data-item-id', `${ item.children[1].dataset.itemId }` )
 			if ( !event.target.classList.contains( 'add' ) ) {
-				createListing();
+				createListing( item );
 				
 			};
-			
 		} );
 	};
 
-	function createListing () {
+	function createListing ( item ) {
+		const interimElem = product.filter( elem => elem.id == item.children[1].dataset.itemId );
+		// console.log(interimElem)
+		const modal = document.querySelector( '.modal' );
+		modal.classList.remove( 'invisible' );
+		setInfo( interimElem[0] ); 
+		modal.querySelector( '.modal__close' ).addEventListener( 'click', event => {
+			modal.classList.add( 'invisible' );
+		} );
+		modal.querySelector( '.modal__add' ).addEventListener( 'click', event => {
+			addToCart (  interimElem[0] );
+		} );
+	};
 
-		
+	function setInfo ( product ) {
+		const image = document.querySelector( '.modal__image-main' );
+		const title = document.querySelector( '.modal__title' );
+		const descr = document.querySelector( '.modal__descr' );
+		const price = document.querySelector( '.modal__price-current' );
+		const available = document.querySelector( '.modal__available' );
+		const quantity = document.querySelector( '.modal__quantity' );
 
-		console.log( 'ee' );
+		image.setAttribute( 'src', `${ product.image }` );
+		title.firstElementChild.textContent = product.title;
+		descr.firstElementChild.textContent = product.descr;
+		price.textContent = product.price;
+		available.textContent = product.available ? 'available' : 'not available';
+		quantity.textContent - product.quantity;
+
 	}
 
 	const storage = {
