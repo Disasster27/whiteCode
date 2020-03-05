@@ -296,6 +296,10 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 
 	function renderCatalog ( goods ) {
+		document.querySelector( '.modal' ).querySelector( '.modal__add' ).addEventListener( 'click', ( event ) => {
+			const interimElem = product.filter( elem => elem.id == event.toElement.dataset.itemId );
+			addToCart( interimElem[0] )
+		} );
 		for ( let i = 1 ; i <= amountElements ; i++ ) {
 			renderItem ( goods[ i ] )
 		}
@@ -321,7 +325,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 	
 	function addToCartEvent ( item, product ) {
-		console.log(  product.id )
+		// console.log(  product.id )
 		
 		item.querySelector( `[ data-item-id="${ product.id }" ]` ).addEventListener( 'click', event => {
 			addToCart (  product );
@@ -431,17 +435,28 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	function createListing ( item ) {
 		const interimElem = product.filter( elem => elem.id == item.children[1].dataset.itemId );
-		// console.log(interimElem)
+		console.log(item)
 		const modal = document.querySelector( '.modal' );
 		modal.classList.remove( 'invisible' );
 		setInfo( interimElem[0] ); 
 		modal.querySelector( '.modal__close' ).addEventListener( 'click', event => {
 			modal.classList.add( 'invisible' );
 		} );
-		modal.querySelector( '.modal__add' ).addEventListener( 'click', event => {
-			addToCart (  interimElem[0] );
-		} );
+		// let foo = addToCart.bind( null,  interimElem[0] );
+		// modal.querySelector( '.modal__close' ).removeEventListener( 'click',  foo );
+		// modal.querySelector( '.modal__add' ).addEventListener( 'click', function foo ( event ) {
+			// console.log(event)
+			// addToCart( interimElem[0] )
+		// } );
+
 	};
+	// document.querySelector( '.modal' ).querySelector( '.modal__add' ).addEventListener( 'click', ( event ) => {
+	// 	console.log(event)
+		// addToCart( interimElem[0] )
+	// } )
+	// function foo ( event ) {
+	// 	console.log( event )
+	// }
 
 	function setInfo ( product ) {
 		const image = document.querySelector( '.modal__image-main' );
