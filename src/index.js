@@ -16,58 +16,83 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	const range = document.querySelector( '.filter__range' );
 	
 	
-	function drawPriceLeft () {
+	// function drawPriceLeft () {
+	// 	let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
+	// 	let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
+	// 	let total = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
+	// 	let priceRange = max - min;
+	// 	let pr = document.querySelectorAll( '.item__price' );
+		
+		
+	// 	let part = parseFloat( styleLeft ) / ( total / 100 ); 
+
+	// 	let minPrice = Math.round( +min + ( priceRange * ( part / 100 ) ) );
+		
+
+		
+	// 	document.querySelector( '[data-value-min]' ).textContent = minPrice;
+		
+		
+	// 	for ( let item of pr ) {
+	// 		if ( item.textContent < minPrice ) {
+	// 			item.closest( '.item' ).classList.add( 'not-available' );
+	// 		} else {
+	// 			item.closest( '.item' ).classList.remove( 'not-available' );
+	// 		};
+	// 	};	
+	// };
+
+	function drawPrice ( direction ) {
 		let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
 		let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
 		let total = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
 		let priceRange = max - min;
 		let pr = document.querySelectorAll( '.item__price' );
 		
+		let part = parseFloat( direction == 'right' ? styleRight : styleLeft ) / ( total / 100 );  //
 		
-		let part = parseFloat( styleLeft ) / ( total / 100 ); 
-
 		let minPrice = Math.round( +min + ( priceRange * ( part / 100 ) ) );
+		let maxPrice = Math.round( +max - ( priceRange * ( part / 100 ) ) ); //
 		
-
-		
-		document.querySelector( '[data-value-min]' ).textContent = minPrice;
-		
-		
-		for ( let item of pr ) {
-			if ( item.textContent < minPrice ) {
-				item.closest( '.item' ).classList.add( 'not-available' );
-			} else {
-				item.closest( '.item' ).classList.remove( 'not-available' );
-			};
-		};	
-	};
-	
-	function drawPriceRight () {
-		let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
-		let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
-		let total = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
-		let priceRange = max - min;
-		let pr = document.querySelectorAll( '.item__price' );
-		
-		
-		let part = parseFloat( styleRight ) / ( total / 100 ); 
-
-		let maxPrice = Math.round( +max - ( priceRange * ( part / 100 ) ) );
-		
-		
-		document.querySelector( '[data-value-max]' ).textContent = maxPrice;
-		
+		if ( direction == 'right' ) {
+			document.querySelector( '[data-value-max]' ).textContent = maxPrice;
+		} else {
+			document.querySelector( '[data-value-min]' ).textContent = minPrice;
+		};
 		
 		for ( let item of pr ) {
-			if ( item.textContent > maxPrice ) {
+			if ( item.textContent > maxPrice || item.textContent < minPrice ) { //
 				item.closest( '.item' ).classList.add( 'not-available' );
 			} else {
 				item.closest( '.item' ).classList.remove( 'not-available' );
 			};
 		};
+	}
+	
+	// function drawPriceRight () {
+	// 	let min = document.querySelector( '[data-value-min]' ).getAttribute( 'data-value-min' );
+	// 	let max = document.querySelector( '[data-value-max]' ).getAttribute( 'data-value-max' );
+	// 	let total = parseFloat( getComputedStyle( document.querySelector( '.range' ) ).width );
+	// 	let priceRange = max - min;
+	// 	let pr = document.querySelectorAll( '.item__price' );
 		
 		
-	};
+	// 	let part = parseFloat( styleRight ) / ( total / 100 );  //
+
+	// 	let maxPrice = Math.round( +max - ( priceRange * ( part / 100 ) ) ); //
+		
+		
+	// 	document.querySelector( '[data-value-max]' ).textContent = maxPrice; //
+		
+		
+	// 	for ( let item of pr ) {
+	// 		if ( item.textContent > maxPrice ) { //
+	// 			item.closest( '.item' ).classList.add( 'not-available' );
+	// 		} else {
+	// 			item.closest( '.item' ).classList.remove( 'not-available' );
+	// 		};
+	// 	};
+	// };
 	
 	range.addEventListener( 'mousedown', event => {
 		if ( event.target.classList.contains( 'range__button-left' ) ) {
@@ -180,7 +205,8 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				
 				setBetween ();
 
-				direction == 'right' ? drawPriceRight() : drawPriceLeft();
+				// direction == 'right' ? drawPriceRight() : drawPriceLeft();
+				drawPrice ( direction )
 
 				let limit = direction == 'right' ? styleRight : styleLeft;
 				if ( parseFloat( limit ) < 0  ) {  
