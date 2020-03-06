@@ -92,6 +92,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				let limit = direction == 'right' ? styleRight : styleLeft;
 				if ( parseFloat( limit ) < 0  ) {  
 					isMove = false;
+					limit = 0;
 					return
 				};
 			}
