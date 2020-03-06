@@ -1,5 +1,4 @@
-//import './scss/main.scss';
-//import { deflateRawSync } from 'zlib';
+
 
 document.addEventListener( 'DOMContentLoaded', () => {
 
@@ -100,7 +99,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				
 				setBetween ();
 				drawPrice ( direction )
-				console.log( styleLeft, styleRight )
 				let limit = direction == 'right' ? styleRight : styleLeft;
 				if ( parseFloat( limit ) < 0  ) {  
 					isMove = false;
@@ -241,9 +239,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			elem.addEventListener( 'click', event => {
 				let start = amountElements * (elem.dataset.pageNumber - 1 );
 				let end = amountElements * elem.dataset.pageNumber ;
-				console.log( toArr ( allGoods ) )
 				let arr = toArr ( allGoods ).slice( start, end );
-				console.log( arr )
 				reRenderItem ( arr );
 			} );
 		} );
@@ -288,7 +284,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	function toArr ( goods ) {
 		let goodsArray = [];
 		product.length = 0;
-		console.log( goods )
 		for ( let key in goods ) {
 			product.push( goods[key] );
 		};
@@ -397,8 +392,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			let inputValue = input.value.trim();
 			const regex = new RegExp( inputValue, 'i' );
 			suitableElem = product.filter( elem =>  regex.test( elem.title ) );
-			console.log( product )
-			console.log( suitableElem )
 			if ( suitableElem.length ) {
 				reRenderItem ( suitableElem );
 			} else {
