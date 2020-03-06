@@ -1,3 +1,3 @@
-# witeCode
+# whiteCode
 
-[witeCode](https://disasster27.github.io/witeCode/dist/index.html)
+[whiteCode](https://disasster27.github.io/whiteCode/dist/index.html)
