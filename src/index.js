@@ -16,6 +16,18 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	const range = document.querySelector( '.filter__range' );
 
 
+	// получение всех товаров
+
+	function getGoods ( url ) {
+		fetch( url )
+			.then( data => data.json() )
+			.then( data => {
+				countPages( data );
+				initModal ( data );
+				toArr ( data );
+			} );
+	};
+
 	// отрисовывает цены в ползунке при изменении диапазона
 
 	function drawPrice ( direction ) {
@@ -88,10 +100,11 @@ document.addEventListener( 'DOMContentLoaded', () => {
 				
 				setBetween ();
 				drawPrice ( direction )
-
+				console.log( styleLeft, styleRight )
 				let limit = direction == 'right' ? styleRight : styleLeft;
 				if ( parseFloat( limit ) < 0  ) {  
 					isMove = false;
+					limit = 0;
 					return
 				};
 			}
@@ -127,17 +140,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		};
 	} );
 	
-	// получение всех товаров
-
-	function getGoods ( url ) {
-		fetch( url )
-			.then( data => data.json() )
-			.then( data => {
-				countPages( data );
-				initModal ( data );
-				toArr ( data );
-			} );
-	};
+	
 
 	// получение макс. и мин. значения цены
 	
@@ -238,7 +241,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			elem.addEventListener( 'click', event => {
 				let start = amountElements * (elem.dataset.pageNumber - 1 );
 				let end = amountElements * elem.dataset.pageNumber ;
+				console.log( toArr ( allGoods ) )
 				let arr = toArr ( allGoods ).slice( start, end );
+				console.log( arr )
 				reRenderItem ( arr );
 			} );
 		} );
@@ -251,7 +256,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			const interimElem =  forIn ( event.toElement.dataset.itemId, product );
 			addToCart( interimElem );
 			
-			console.log( 12 )
 			setQuantityList (interimElem.id);
 		} );
 		for ( let i = 1 ; i <= amountElements ; i++ ) {
@@ -282,12 +286,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	// получение массива всех товаров
 
 	function toArr ( goods ) {
-		// const goodsArray = [];
+		let goodsArray = [];
+		product.length = 0;
+		console.log( goods )
 		for ( let key in goods ) {
 			product.push( goods[key] );
 		};
-		// product = goodsArray ;
-		// return goodsArray;
+		goodsArray = product  ;
+		return goodsArray;
 	};
 
 	// установка обработчика на кнопке корточки товара для добавления в корзину 
@@ -391,6 +397,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 			let inputValue = input.value.trim();
 			const regex = new RegExp( inputValue, 'i' );
 			suitableElem = product.filter( elem =>  regex.test( elem.title ) );
+			console.log( product )
 			console.log( suitableElem )
 			if ( suitableElem.length ) {
 				reRenderItem ( suitableElem );
@@ -419,6 +426,14 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		// const interimElem = product.filter( elem => elem.id == item.lastElementChild .dataset.itemId );
 		const interimElem =  forIn ( e.toElement.offsetParent.lastElementChild.dataset.itemId, product );
 		const modal = document.querySelector( '.modal' );
+
+		modal.addEventListener( 'click', event => {
+			if ( event.target.classList.contains( 'modal' ) ) {
+				document.querySelector( 'body' ).classList.remove( 'lock' );
+				modal.classList.add( 'invisible' );
+			}
+		} )
+
 		modal.classList.remove( 'invisible' );
 		setInfo( interimElem ); 
 		modal.querySelector( '.modal__close' ).addEventListener( 'click', event => {
